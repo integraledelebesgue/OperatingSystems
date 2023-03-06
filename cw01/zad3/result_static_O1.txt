@@ -1,0 +1,121 @@
+input $ Initializing new list of 11 blocks...
+Executed in:
+	real: 4522 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad2/repl.h...
+Executed in:
+	real: 2383688 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad2/command_processing.h...
+Executed in:
+	real: 2730579 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad2/repl_dl.c...
+Executed in:
+	real: 2499326 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad2/repl.c...
+Executed in:
+	real: 3053078 ns
+	user cpu: 1 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad2/command_processing.c...
+Executed in:
+	real: 3200731 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad3/test.c...
+Executed in:
+	real: 3040598 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad1/filenames.c...
+Executed in:
+	real: 2756900 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad1/memory_blocks.h...
+Executed in:
+	real: 2677000 ns
+	user cpu: 1 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad1/errors.h...
+Executed in:
+	real: 2717424 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad1/memory_blocks.c...
+Executed in:
+	real: 3091009 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Attempting to read file ./zad1/filenames.h...
+Executed in:
+	real: 3367652 ns
+	user cpu: 1 ns
+	system cpu: 0 ns
+input $ Deleting block at index 0...
+Executed in:
+	real: 1301 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 1...
+Executed in:
+	real: 1110 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 2...
+Executed in:
+	real: 1069 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 3...
+Executed in:
+	real: 1044 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 4...
+Executed in:
+	real: 1048 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 5...
+Executed in:
+	real: 1051 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 6...
+Executed in:
+	real: 1046 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 7...
+Executed in:
+	real: 1053 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 8...
+Executed in:
+	real: 1066 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 9...
+Executed in:
+	real: 1022 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Deleting block at index 10...
+Executed in:
+	real: 1088 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ Destroying current list...
+Executed in:
+	real: 1280 ns
+	user cpu: 0 ns
+	system cpu: 0 ns
+input $ 

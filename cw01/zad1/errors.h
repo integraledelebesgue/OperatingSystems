@@ -1,0 +1,18 @@
+#ifndef ERRORS
+#define ERRORS
+
+typedef enum {
+    NO_ERROR,
+    MEMORY_ERROR,
+    NULLPTR_ERROR,
+    INDEX_ERROR,
+    FILE_ERROR,
+    ARGUMENT_ERROR,
+    IO_ERROR,
+    COMMAND_ERROR,
+    LIST_OVERFLOW_ERROR,
+    LIST_UNINITIALIZED_ERROR,
+    BREAK
+} error;
+
+#endif

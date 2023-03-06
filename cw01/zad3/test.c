@@ -32,7 +32,12 @@ int main(const int argc, const char** argv) {
         fprintf(repl_stream, "count %s\n", buffer);
     }
 
-    for(size_t i = 0; i < file_count; i++)
+    size_t i;
+
+    for(i = 0; i < file_count; i++) 
+        fprintf(repl_stream, "show %ld\n", i);
+
+    for(i = 0; i < file_count; i++)
         fprintf(repl_stream, "delete %ld\n", i);    
 
     fprintf(repl_stream, "destroy\n");

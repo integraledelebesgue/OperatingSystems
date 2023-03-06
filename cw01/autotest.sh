@@ -6,3 +6,5 @@ do
     make shared_test OPTIMIZATION=$OPTIM
     make dl_test OPTIMIZATION=$OPTIM
 done
+
+make clean

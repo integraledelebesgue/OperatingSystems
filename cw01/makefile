@@ -55,7 +55,7 @@ shared_test: zad2_shared test_executable
 	zad3/test.out zad2/zad2_shared.out > zad3/result_shared_$(OPTIMIZATION).txt
 
 dl_test: zad2_dl test_executable
-	zad3/test.out zad2/zad2_dl.out > zad3/result_dl_$(OPTIMIZATION).txt
+	zad3/test.out zad2/zad2_dl.out > zad3/result_dynamic_$(OPTIMIZATION).txt
 
 test_executable:
 	$(CC) $(FLAGS) -$(OPTIMIZATION) zad3/test.c -o zad3/test.out

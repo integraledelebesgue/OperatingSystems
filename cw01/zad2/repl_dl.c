@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<time.h>
-#include<sys/times.h>
+#include<sys/resource.h>
 #include<dlfcn.h>
 
 #include"../zad1/errors.h"
@@ -150,36 +150,37 @@ error process_state(Session* session) {
 
 
 void repl(Session* session) {
-    struct tms cpu_time_buffer;
-    struct timespec real_time_buffer;
+    struct timespec real_time_usage;
+    struct rusage cpu_usage;
 
     register time_t real_time;
     register time_t user_cpu_time;
     register time_t system_cpu_time;
 
     while(1) {
-        timespec_get(&real_time_buffer, TIME_UTC);
-        times(&cpu_time_buffer);
+        timespec_get(&real_time_usage, TIME_UTC);
+        getrusage(RUSAGE_CHILDREN, &cpu_usage);
 
-        real_time = real_time_buffer.tv_nsec;
-        user_cpu_time = cpu_time_buffer.tms_cutime;
-        system_cpu_time = cpu_time_buffer.tms_cstime;
+        real_time = real_time_usage.tv_nsec;
+        user_cpu_time = cpu_usage.ru_utime.tv_usec;
+        system_cpu_time = cpu_usage.ru_stime.tv_usec;
 
         if(handle(process_state(session)) == BREAK)
             return;
 
-        timespec_get(&real_time_buffer, TIME_UTC);
-        times(&cpu_time_buffer);
+        timespec_get(&real_time_usage, TIME_UTC);
+        getrusage(RUSAGE_CHILDREN, &cpu_usage);
 
         if(session->state == READ) printf(
-            "Executed in:\n\treal: %ld ns\n\tuser cpu: %ld ns\n\tsystem cpu: %ld ns\n",
-            real_time_buffer.tv_nsec - real_time,
-            cpu_time_buffer.tms_cutime - user_cpu_time,
-            cpu_time_buffer.tms_cstime - system_cpu_time
+            "Executed in: Real time: %ld ns\tUser CPU: %ld us\tSystem CPU: %ld us\n",
+            real_time_usage.tv_nsec - real_time,
+            cpu_usage.ru_utime.tv_usec - user_cpu_time,
+            cpu_usage.ru_stime.tv_usec - system_cpu_time
         );
     }
 
 }
+
 
 void load_functions(void* handle) {
     get_index_fptr = (error (*)(BlockList*, void**, size_t))dlsym(handle, "get_index");

@@ -1,82 +1,82 @@
 input $ Initializing new list of 11 blocks...
-Executed in: Real time: 5721 ns	User CPU: 0 us	System CPU: 0 us
-input $ Attempting to read file ./zad2/repl.h...
-Executed in: Real time: 2368895 ns	User CPU: 2262 us	System CPU: 0 us
-input $ Attempting to read file ./zad2/command_processing.h...
-Executed in: Real time: 2364660 ns	User CPU: 1651 us	System CPU: 614 us
-input $ Attempting to read file ./zad2/repl_dl.c...
-Executed in: Real time: 2445177 ns	User CPU: 2297 us	System CPU: 0 us
-input $ Attempting to read file ./zad2/repl.c...
-Executed in: Real time: 2960040 ns	User CPU: 2816 us	System CPU: 0 us
-input $ Attempting to read file ./zad2/command_processing.c...
-Executed in: Real time: 2803167 ns	User CPU: 1961 us	System CPU: 686 us
-input $ Attempting to read file ./zad3/test.c...
-Executed in: Real time: 2855848 ns	User CPU: 2168 us	System CPU: 599 us
-input $ Attempting to read file ./zad1/filenames.c...
-Executed in: Real time: 2922603 ns	User CPU: 2768 us	System CPU: 0 us
-input $ Attempting to read file ./zad1/memory_blocks.h...
-Executed in: Real time: 3038451 ns	User CPU: 2114 us	System CPU: 790 us
+Executed in: Real time: 10071 ns	User CPU: 0 us	System CPU: 0 us
 input $ Attempting to read file ./zad1/errors.h...
-Executed in: Real time: 2967922 ns	User CPU: 2753 us	System CPU: 0 us
-input $ Attempting to read file ./zad1/memory_blocks.c...
-Executed in: Real time: 2562907 ns	User CPU: 2447 us	System CPU: 0 us
+Executed in: Real time: 9444904 ns	User CPU: 2566 us	System CPU: 3074 us
+input $ Attempting to read file ./zad1/filenames.c...
+Executed in: Real time: 13833547 ns	User CPU: 4406 us	System CPU: 1132 us
 input $ Attempting to read file ./zad1/filenames.h...
-Executed in: Real time: 2814919 ns	User CPU: 2647 us	System CPU: 0 us
+Executed in: Real time: 6501574 ns	User CPU: 4326 us	System CPU: 1350 us
+input $ Attempting to read file ./zad1/memory_blocks.c...
+Executed in: Real time: 5854349 ns	User CPU: 4618 us	System CPU: 0 us
+input $ Attempting to read file ./zad1/memory_blocks.h...
+Executed in: Real time: 8164176 ns	User CPU: 2595 us	System CPU: 2788 us
+input $ Attempting to read file ./zad2/command_processing.c...
+Executed in: Real time: 5447083 ns	User CPU: 4115 us	System CPU: 1141 us
+input $ Attempting to read file ./zad2/command_processing.h...
+Executed in: Real time: 5237967 ns	User CPU: 4906 us	System CPU: 0 us
+input $ Attempting to read file ./zad2/repl.c...
+Executed in: Real time: 5863355 ns	User CPU: 2782 us	System CPU: 2513 us
+input $ Attempting to read file ./zad2/repl.h...
+Executed in: Real time: 5539767 ns	User CPU: 3790 us	System CPU: 1380 us
+input $ Attempting to read file ./zad2/repl_dl.c...
+Executed in: Real time: 4282319 ns	User CPU: 3011 us	System CPU: 1068 us
+input $ Attempting to read file ./zad3/test.c...
+Executed in: Real time: 3986841 ns	User CPU: 3837 us	System CPU: 0 us
 input $ Block at index 0:
- 53  94 874
-Executed in: Real time: 1188 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 1:
-  6  11 141
-Executed in: Real time: 892 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 2:
- 222  447 6222
-Executed in: Real time: 820 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 3:
- 184  353 4856
-Executed in: Real time: 755 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 4:
-  42   89 1051
-Executed in: Real time: 801 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 5:
-  49  121 1305
-Executed in: Real time: 810 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 6:
- 44  82 890
-Executed in: Real time: 748 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 7:
- 19  43 467
-Executed in: Real time: 744 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 8:
  17  21 264
-Executed in: Real time: 753 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 9:
- 108  216 2826
-Executed in: Real time: 758 ns	User CPU: 0 us	System CPU: 0 us
-input $ Block at index 10:
+Executed in: Real time: 1563 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 1:
+ 44  82 890
+Executed in: Real time: 1345 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 2:
   6  15 154
-Executed in: Real time: 781 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1237 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 3:
+ 117  233 2993
+Executed in: Real time: 1169 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 4:
+ 19  43 467
+Executed in: Real time: 1214 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 5:
+  42   89 1051
+Executed in: Real time: 1173 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 6:
+  6  11 141
+Executed in: Real time: 1181 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 7:
+ 184  353 4856
+Executed in: Real time: 1197 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 8:
+ 53  94 874
+Executed in: Real time: 1222 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 9:
+ 222  447 6222
+Executed in: Real time: 1292 ns	User CPU: 0 us	System CPU: 0 us
+input $ Block at index 10:
+  49  121 1305
+Executed in: Real time: 1221 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 0...
-Executed in: Real time: 932 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1312 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 1...
-Executed in: Real time: 785 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1125 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 2...
-Executed in: Real time: 778 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1100 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 3...
-Executed in: Real time: 718 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1107 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 4...
-Executed in: Real time: 787 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1104 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 5...
-Executed in: Real time: 714 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1100 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 6...
-Executed in: Real time: 783 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1105 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 7...
-Executed in: Real time: 718 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1103 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 8...
-Executed in: Real time: 747 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1151 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 9...
-Executed in: Real time: 733 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1120 ns	User CPU: 0 us	System CPU: 0 us
 input $ Deleting block at index 10...
-Executed in: Real time: 802 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1232 ns	User CPU: 0 us	System CPU: 0 us
 input $ Destroying current list...
-Executed in: Real time: 847 ns	User CPU: 0 us	System CPU: 0 us
+Executed in: Real time: 1004 ns	User CPU: 0 us	System CPU: 0 us
 input $ 

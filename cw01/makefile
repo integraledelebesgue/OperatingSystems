@@ -1,4 +1,4 @@
-all: zad1_static zad1_shared zad2_static zad2_shared zad2_dl static_test shared_test dl_test clean
+all: zad1_static zad1_shared zad2_static zad2_shared zad2_dl clean
 
 OPTIMIZATION=O3
 CC=gcc

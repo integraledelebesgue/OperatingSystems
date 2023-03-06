@@ -1,30 +1,42 @@
-1. Opcje optymalizacji:
-    1.1. Czasy tworzenia listy:
-        1.1.1. Czas wykonania jest najdłuższy dla flagi -O2
-        1.1.2. Czas wykonania jest najkrótszy dla flagi -O3
-        1.1.3. Czas wykonania dla flagi -O1 jest dłuższy niż dla -O
-        1.1.4. Czas wykonania dla flagi -Os jest drugim najgorszym
-    Wniosek: Najlepsza jest optymalizacja -O3, optymalizacje -O2 i -Os pogarszają działanie
+Spostrzeżenia dotyczące wydajności programu:
 
-    1.2. Czasy czytania plików i zapisywania danych do pamięci:
-        1.2.1. Czasy są najgorsze dla flag -O0 i -Os
-        1.2.2. W pozostałych przypadkach czasy są porównywalne
-    Wniosek: Optymalizacje -O0 i -Os nie prowadzą do przyspieszenia czytania plików i zapisu do pamięci
+1. Realny czas działania funkcji z biblioteki z zadania 1.
+    1.1. Biblioteka statyczna
+        1.1.1. Tworzenie listy
+            Poziomy optymalizacji wpływają na czas wykonania według porządku: Os > O0 > O3 > O > O1 > O2
+            (w tym sensie, że czas wykonania jest najkrótszy dla O2 i najdłuższy dla Os).
+        1.1.2. Czytanie plików i zapis do pamięci
+            Czasy nie różnią się w sposób znaczący - operacja zajmuje między 2 a 3 ms, jednak minimum (ok. 1.7 ms) zaobserwowano na poziomie O.
+        1.1.3. Wyświetlanie zawartości pamięci 
+            Najlepszy wynik jest osiągany dla opcji O0. O2, O3 i Os dają porównywalne, nieznacznie wyższe wyniki. Najgorszy efekt jest osiągany dla O1.
+        1.1.4. Zwalnianie zawartości pamięci
+            Obserwacja jest identyczna jak w punkcie 1.1.3.
+        1.1.5. Usuwanie (pustej) listy z pamięci
+            O1 > O > Os > O0 > O2 > O3
 
-    1.3. Czasy usuwania wpisów z pamięci:
-        1.3.1. Czasy są najgorsze dla flag -O0 i -O
-        1.3.2. Czasy są najlepsze dla -O2 i -Os
-        1.3.3. Czasy dla -O3 są niewiele gorsze od -O2
-    Wniosek: Najlepsze są optymalizacje -O2 i -Os, -O3 również prowadzi do znacznego przyspieszenia działania
+    1.2. Biblioteka współdzielona
+        1.2.1. Tworzenie listy
+            O1 > Os > O0 > O3 > O > O2
+        1.2.2. Czytanie plików i zapis do pamięci
+            Czasy różnią się w sposób nieusystematyzowany - nie da się jednoznacznie wskazać najlepszej metody optymalizacji.
+        1.2.3. Wyświetlanie zawartości pamięci 
+            Najlepszy wynik jest osiągany dla opcji O0. W pozostałych przypadkach nie można zaobserwować znaczących różnic.
+        1.2.4. Zwalnianie zawartości pamięci
+            Obserwacja jest identyczna jak w punkcie 1.2.3.
+        1.2.5. Usuwanie (pustej) listy z pamięci
+            Os > O2 > O > O1 > O3 > O0
 
-    1.4. Czasy usuwania (pustej) listy:
-        1.4.1. Czas jest najlepszy dla -Os
-        1.4.2. Czasy dla -O2 i -O3 są porównywalne, minimalnie gorsze od -Os
-    Wniosek: Najlepsza jest optymalizacja -OS. -O2 i -O3 również polepszają działanie
+    1.3. Biblioteka ładowana dynamicznie
+        1.3.1. Tworzenie listy
+            O3 > O > O0 > Os > O2 > O1
+        1.3.2. Czytanie plików i zapis do pamięci
+            Najlepsze wyniki są osiągane dla opcji O1 i O3. Wynik znacząco gorszy osiąga opcja O. W posostałych przypadkach różnice są nieznaczące.
+        1.3.3. Wyświetlanie zawartości pamięci 
+            Najlepszy wynik jest osiągany dla opcji O2. O daje niewiele gorszy wynik.
+        1.3.4. Zwalnianie zawartości pamięci
+            Wyniki midzy poszczególnymi opcjami nie różnią się w sposób znaczący.
+        1.3.5. Usuwanie (pustej) listy z pamięci
+            Os > O3 > O0 > O1 > O > O2
 
-Wniosek: W zależności od poziomu istotności poszczególnych funkcji programu można zastosować optymalizacje:
-    -O3 dla szybkiej inicjalizacji list
-    -Os dla szybkiego usuwania elementów i list
-Najbardziej uniwersalna zdaje się być optymalizacja -O3
-
-2. Sposób ładowania bibliotek:
+2. Czas procesora - w trybie użytkownika i w trybie jądra
+    

@@ -1,0 +1,15 @@
+makefile -- 2524 bytes
+Spostrzezenia.txt -- 806 bytes
+Total size: 3330 bytes
+Executed in 0 s 8346175 ns
+
+
+Wywołanie wc -c *:
+    806 Spostrzezenia.txt
+   2524 makefile
+      0 test
+      0 zad1
+      0 zad2
+      0 zad3
+      0 zad4
+   3330 razem

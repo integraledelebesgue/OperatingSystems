@@ -1,0 +1,8 @@
+Buffer 1 byte:
+Executed in 0 s 18802598 ns
+1a2
+> 
+Buffer 1024 bytes:
+Executed in 0 s 8956613 ns
+1a2
+> 

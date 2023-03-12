@@ -1,0 +1,17 @@
+1. Zadanie 1:
+    Wyniki działania mojego programu i funkcji tr nie różnią się.
+
+2. Zadanie 2:
+    Funkcja "tac | rev" działa inaczej niż program żądany w poleceniu -
+    wyniki różnią się od siebie jedynie obecnością nowej linii na początku wyjściowego pliku.
+    Funkcja tac odczytuje kolejne linie od końca pliku, a rev odwraca je, pomijając obecne w pliku znaki '\n' 
+    i dodając je osobno na końcach nowo utworzonych linii.
+    Ta operacja może dać inny wynik niż kopiowanie pliku znak po znaku, tak jak czyni to moja funkcja.
+
+3. Zadanie 3:
+    Sumaryczne wielkości przeczytanych plików są identyczne.
+
+4. Zadanie 4:
+    Sumaryczne wielkości różnią się od siebie o wielkość pliku z pomiarami do zadania 4. 
+    Wynika to z faktu, że w momencie wykonywania funkcji wc, moja funkcja już zapisała tam swój wynik,
+    a wc, w sposób oczywisty, jeszcze nie.

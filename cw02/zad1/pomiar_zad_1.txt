@@ -1,6 +1,6 @@
 Lib:
-Executed in 0 s 9932555 ns
+Executed in 0 s 1190153 ns
 Pliki test/pan-tadeusz-replaced.txt i test/pan-tadeusz-tr.txt są identyczne
 Sys:
-Executed in 0 s 96371237 ns
+Executed in 0 s 6765512 ns
 Pliki test/pan-tadeusz-replaced.txt i test/pan-tadeusz-tr.txt są identyczne

@@ -6,7 +6,7 @@
     wyniki różnią się od siebie jedynie obecnością nowej linii na początku wyjściowego pliku.
     Funkcja tac odczytuje kolejne linie od końca pliku, a rev odwraca je, pomijając obecne w pliku znaki '\n' 
     i dodając je osobno na końcach nowo utworzonych linii.
-    Ta operacja może dać inny wynik niż kopiowanie pliku znak po znaku, tak jak czyni to moja funkcja.
+    Ta operacja może dać inny wynik niż kopiowanie pliku bajt po bajcie, tak jak czyni to moja funkcja.
 
 3. Zadanie 3:
     Sumaryczne wielkości przeczytanych plików są identyczne.

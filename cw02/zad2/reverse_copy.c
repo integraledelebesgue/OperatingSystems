@@ -18,10 +18,10 @@ typedef enum {NO_ERROR, ARGUMENT_ERROR} err;
 
 
 #define COPY_REVERSED_BLOCK(_source, _dest, _curr_size, _buffer, _i, _read_size) {\
-    curr_size = fread((void*)_buffer, sizeof(char), _read_size, _source);\
+    curr_size = fread((void*)_buffer, 1, _read_size, _source);\
     \
     for (_i = _curr_size; _i-- > 0;)\
-        fwrite((void*)&_buffer[i], sizeof(char), 1, _dest);\
+        fwrite((void*)&_buffer[i], 1, 1, _dest);\
     \
     fseek(_source, -2 * BUFFER_SIZE, SEEK_CUR);\
 }\

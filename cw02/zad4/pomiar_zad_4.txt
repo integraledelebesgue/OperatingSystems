@@ -2,12 +2,12 @@
 	makefile -- 2524 bytes
 ./zad1/:
 	char_replacement.c -- 1937 bytes
-	pomiar_zad_1.txt -- 219 bytes
+	pomiar_zad_1.txt -- 218 bytes
 	zad1_lib.out -- 16312 bytes
 	zad1_sys.out -- 16352 bytes
 ./zad2/:
-	reverse_copy.c -- 1782 bytes
-	pomiar_zad_2.txt -- 103 bytes
+	reverse_copy.c -- 1760 bytes
+	pomiar_zad_2.txt -- 102 bytes
 	zad2_1024.out -- 16480 bytes
 	zad2_1.out -- 16432 bytes
 ./zad3/:
@@ -26,10 +26,10 @@
 	pan-tadeusz-replaced.txt -- 1780 bytes
 	pan-tadeusz-reversed-tac.txt -- 1782 bytes
 	pan-tadeusz-reversed.txt -- 1781 bytes
-	Spostrzezenia.txt -- 806 bytes
+	Spostrzezenia.txt -- 900 bytes
 
-Total size: 134669 bytes
-Executed in 0 s 10748242 ns
+Total size: 134739 bytes
+Executed in 0 s 895436 ns
 
 
 Wywołanie find ./ | xargs wc --bytes:
@@ -37,12 +37,12 @@ Wywołanie find ./ | xargs wc --bytes:
    2524 ./makefile
       0 ./zad1
    1937 ./zad1/char_replacement.c
-    219 ./zad1/pomiar_zad_1.txt
+    218 ./zad1/pomiar_zad_1.txt
   16312 ./zad1/zad1_lib.out
   16352 ./zad1/zad1_sys.out
       0 ./zad2
-   1782 ./zad2/reverse_copy.c
-    103 ./zad2/pomiar_zad_2.txt
+   1760 ./zad2/reverse_copy.c
+    102 ./zad2/pomiar_zad_2.txt
   16480 ./zad2/zad2_1024.out
   16432 ./zad2/zad2_1.out
       0 ./zad3
@@ -51,7 +51,7 @@ Wywołanie find ./ | xargs wc --bytes:
   16352 ./zad3/zad3.out
       0 ./zad4
    1446 ./zad4/list_rec.c
-    839 ./zad4/pomiar_zad_4.txt
+    837 ./zad4/pomiar_zad_4.txt
   16472 ./zad4/zad4.out
       0 ./test
    1051 ./test/test.c
@@ -61,5 +61,5 @@ Wywołanie find ./ | xargs wc --bytes:
    1780 ./test/pan-tadeusz-replaced.txt
    1782 ./test/pan-tadeusz-reversed-tac.txt
    1781 ./test/pan-tadeusz-reversed.txt
-    806 ./Spostrzezenia.txt
- 135508 razem
+    900 ./Spostrzezenia.txt
+ 135576 razem

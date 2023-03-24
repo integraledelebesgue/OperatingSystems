@@ -18,26 +18,41 @@
 #endif
 
 
-#define loop while(1)
-
-
-#define BREAK_ON_ERROR() {\
-    if (errno) {\
-        fprintf(stderr, "Error %d: ", errno);\
-        perror("");\
-        exit(EXIT_FAILURE);\
-    }\
-}\
-
-
-static pthread_mutex_t printf_mutex;
-static int pipe_desc[2] = {0, 0};
-static int cmd_counter = 0;
-
-
 void handler(int, siginfo_t*, void*);
 pthread_t execute(command cmd);
 void time_loop();
+
+
+#define loop while(1)
+
+
+static int pipe_desc[2] = {0, 0};
+
+#define init_pipe() {  \
+    pipe(pipe_desc);   \
+    sync_error_check() \
+}                      \
+
+
+static pthread_mutex_t errno_mutex;
+static pthread_mutex_t printf_mutex;
+
+#define init_mutex() {                        \
+    pthread_mutex_init(&printf_mutex, NULL);  \
+    pthread_mutex_init(&errno_mutex, NULL);   \
+    sync_error_check();                       \
+}                                             \
+
+
+#define sync_error_check() {                  \
+    pthread_mutex_lock(&errno_mutex);         \
+    if (errno){                               \
+        fprintf(stderr, "Error %d: ", errno); \
+        perror("");                           \
+        exit(EXIT_FAILURE);                   \
+    }                                         \
+    pthread_mutex_unlock(&errno_mutex);       \
+}                                             \
 
 
 void sync_printf(const char *format, ...) {
@@ -46,7 +61,6 @@ void sync_printf(const char *format, ...) {
 
     pthread_mutex_lock(&printf_mutex);
     vprintf(format, args);
-    fflush(stdout);
     pthread_mutex_unlock(&printf_mutex);
 
     va_end(args);
@@ -55,22 +69,24 @@ void sync_printf(const char *format, ...) {
 
 void init_default_mask(sigset_t* mask) {
     sigfillset(mask);
+    
     #ifdef DEBUG
     sigdelset(mask, SIGINT);
     #endif
-    sigprocmask(SIG_SETMASK, mask, NULL);
-    BREAK_ON_ERROR();
+    
+    sync_error_check();
 }
 
 
 void init_await_mask(sigset_t* mask) {
     sigfillset(mask);
-    sigfillset(mask);
+    sigdelset(mask, SIGNAL);
+    
     #ifdef DEBUG
     sigdelset(mask, SIGINT);
     #endif
-    sigdelset(mask, SIGNAL);
-    BREAK_ON_ERROR();
+    
+    sync_error_check();
 }
 
 
@@ -80,27 +96,24 @@ void init_handler() {
     
     init_default_mask(&default_mask);
     action.sa_mask = default_mask;
-    action.sa_flags = SA_SIGINFO;
+    action.sa_flags = SA_SIGINFO | SA_RESTART;
     action.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
 
     sigaction(SIGNAL, &action, NULL);
-    BREAK_ON_ERROR();
+    sync_error_check();
 }
 
 
-void init_pipe() {
-    pipe(pipe_desc);
-    BREAK_ON_ERROR()
-}
-
-
-void events_loop() {
+_Noreturn void events_loop() {
     sigset_t await_mask;
-    init_await_mask(&await_mask);
-    init_handler();
+    sigset_t default_mask;
 
+    init_default_mask(&default_mask);
+    init_await_mask(&await_mask);
+
+    sigprocmask(SIG_SETMASK, &default_mask, NULL);
+    
     loop {
-        sync_printf("Waiting for signal...\n");
         sigsuspend(&await_mask);
     }
 }
@@ -109,36 +122,49 @@ void events_loop() {
 void handler(int, siginfo_t* siginfo, void*) {
     command cmd = verify(siginfo->si_value.sival_int);
 
-    if (!cmd) {
-        sigqueue(siginfo->si_pid, SIGNAL, (union sigval){.sival_int = REJECTED});
-        return;
-    }
+    switch (cmd) {
+        case NOTHING:
+            sigqueue(siginfo->si_pid, SIGNAL, (union sigval){.sival_int = REJECTED});
+            break;
 
-    write(pipe_desc[1], (void*)&cmd, sizeof(int));
-    sigqueue(siginfo->si_pid, SIGNAL, (union sigval){.sival_int = RECEIVED});
-    BREAK_ON_ERROR();
+        case QUIT:
+            write(pipe_desc[1], (void*)&cmd, sizeof(int));
+            sigqueue(siginfo->si_pid, SIGNAL, (union sigval){.sival_int = TERMINATED});
+            break;
+
+        default:
+            write(pipe_desc[1], (void*)&cmd, sizeof(int));
+            sigqueue(siginfo->si_pid, SIGNAL, (union sigval){.sival_int = RECEIVED});
+            break;
+    }
+    
+    //sync_error_check();  // Checking for errors here causes program to crash 
+    //                        despite having a mutex on errno :c
+    //                        Must remain unsafe then.
 }
 
 
 void processor() {
     command cmd = NOTHING;
-    command prev_cmd = NOTHING;
     pthread_t task_id = 0;
+    sigset_t mask;
+
+    init_default_mask(&mask);
+    sigprocmask(SIG_SETMASK, &mask, NULL);
+    sync_error_check();
 
     loop {
         read(pipe_desc[0], (void*)&cmd, sizeof(int));
-        if (task_id) pthread_cancel(task_id);
-        BREAK_ON_ERROR();
 
-        if (cmd != prev_cmd) {
-            prev_cmd = cmd;
-            cmd_counter++;
-        }
+        if (task_id) pthread_cancel(task_id);
+        
+        sync_error_check();
 
         if (cmd == QUIT) {
-            sync_printf("Closing catcher\n");
+            sync_printf("Processor thread terminating\n");
             pthread_exit(NULL);
         }
+
         task_id = execute(cmd);
     }
 }
@@ -149,6 +175,14 @@ pthread_t execute(command cmd) {
     struct tm* tm;
     time_t timer = time(NULL);
     pthread_t time_loop_id;
+
+    static command prev_cmd;
+    static int cmd_counter;
+
+    if (cmd != prev_cmd) {
+        prev_cmd = cmd;
+        cmd_counter++;
+    }
 
     switch (cmd) {
         case WRITE:
@@ -167,7 +201,7 @@ pthread_t execute(command cmd) {
 
         case TIME_LOOP:
             pthread_create(&time_loop_id, NULL, (void* (*)(void*))time_loop, NULL);
-            BREAK_ON_ERROR();
+            sync_error_check();
             return time_loop_id;
 
         default:
@@ -176,14 +210,19 @@ pthread_t execute(command cmd) {
 }
 
 
-void time_loop() {
+_Noreturn void time_loop() {
     struct tm* tm;
     time_t timer;
+    sigset_t mask;
+
+    init_default_mask(&mask);
+    sigprocmask(SIG_SETMASK, &mask, NULL);
+    sync_error_check();
 
     loop {
         timer = time(NULL);
         tm = localtime(&timer);
-        fprintf(stdout, "%s", asctime(tm));
+        sync_printf("%s", asctime(tm));
         sleep(1);
     }
 }
@@ -191,20 +230,27 @@ void time_loop() {
 
 int main(const int argc, const char** argv) {
     pthread_t loop_id, processor_id;
+    sigset_t mask;
     
     setbuf(stdout, NULL);
-    pthread_mutex_init(&printf_mutex, NULL);
 
+    init_mutex();
     init_pipe();
-    
+    init_handler();
+    init_default_mask(&mask);
+    sigprocmask(SIG_SETMASK, &mask, NULL);
+    sync_error_check();
+
     printf("Catcher's PID: %d\n", getpid());
 
     pthread_create(&loop_id, NULL, (void* (*)(void*))events_loop, NULL);
     pthread_create(&processor_id, NULL, (void* (*)(void*))processor, NULL);
-    BREAK_ON_ERROR();
+    sync_error_check();
 
     pthread_join(processor_id, NULL);
     pthread_cancel(loop_id);
+
+    sync_error_check();
 
     return 0;
 }

@@ -34,7 +34,7 @@ void set_default_mask(sigset_t* mask) {
     sigdelset(mask, SIGINT);
     #endif
     sigprocmask(SIG_SETMASK, mask, NULL);
-    BREAK_ON_ERROR();
+    check_for_error();
 }
 
 
@@ -53,7 +53,7 @@ void set_handler() {
     action.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
     set_default_mask(&action.sa_mask);
     sigaction(SIGNAL, &action, NULL);
-    BREAK_ON_ERROR();
+    check_for_error();
 }
 
 

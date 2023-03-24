@@ -1,0 +1,28 @@
+Zadanie 1.
+    Wykonanie eksperymentu wykazało, że:
+        1. Ignorowanie sygnału jest dziedziczone zarówno przez proces potomny tworzony przez fork 
+            jak i proces utworzony przy pomocy exec
+        2. Handler jest dziedziczony przez proces fork, ale nie przez proces exec
+        3. Maska sygnałów jest dziedziczona przez oba procesy
+        4. Sygnały oczekujące są dziedziczone przez exec, ale nie przez fork
+
+    Test dziedziczenia handlera prowadzi do uzyskania błędu w procesie exec, ponieważ obowiązuje tam domyślne zachowanie
+    przy odebraniu sygnału, czyli zakończenie procesu. Z tego powodu błędy wykonania programu są w makefile wyciszone.
+
+Zadanie 2.
+    Test działania flagi SA_ONESHOT dla funkcji sigaction prowadzi do zakończenia programu błędem.
+    Jest to zachowanie spodziewane. Dzieje się tak, ponieważ handler dla sygnału jest instalowany jednorazowo - 
+    odebranie tegoż sygnału skutkuje wykonaniem handlera i przywróceniem domyślnego zachowania, jakim jest zakończenie procesu.
+    Z tego powodu błędy wykonania programu zostały w makefile wyciszone.
+
+Zadanie 3.
+    Catcher korzysta z wielowątkowości. Ciekawe okazało się odkrycie, 
+    że handler dla sygnału instalowany jest w ramach procesu,
+    a maski sygnałów są ustawiane dla każdego wątku osobno. Z tego powodu, 
+    aby na sygnały mógł czekać tylko jeden wątek ("events loop"), 
+    w pozostałych wątkach należy ustawić odpowiednie maski blokujące nasłuchiwany sygnał.
+    
+    Z nieznanych mi przyczyn, odczytanie wartości zmiennej `errno` w handlerze powoduje błąd programu -
+    "Interrupted system call error". Co ciekawe, błąd ten pojawia się wyłącznie w handlerze, 
+    podczas gdy pozostałe wątki wielokrotnie odczytują wartość zmiennej.
+    Zastosowanie mutex-u na zmiennej errno nie rozwiązało problemu, więc obsługa błędów w handlerze została zarzucona. 

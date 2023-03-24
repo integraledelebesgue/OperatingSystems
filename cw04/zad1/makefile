@@ -10,10 +10,10 @@ other:
 	$(CC) $(FLAGS) other.c -o other.out
 
 test: fork_sig
-	-@./fork_sig.out ignore
+	./fork_sig.out ignore
 	-@./fork_sig.out handler
-	-@./fork_sig.out mask
-	-@./fork_sig.out pending
+	./fork_sig.out mask
+	./fork_sig.out pending
 
 clean:
 	-@rm *.out

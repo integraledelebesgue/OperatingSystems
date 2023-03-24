@@ -16,7 +16,7 @@
 }\
 
 
-#define BREAK_ON_ERROR() {\
+#define error_check() {\
     if (errno) {\
         fprintf(stderr, "Error %d ", errno);\
         perror("");\
@@ -34,7 +34,7 @@ void set_default_mask(sigset_t* mask) {
     sigdelset(mask, SIGINT);
     #endif
     sigprocmask(SIG_SETMASK, mask, NULL);
-    check_for_error();
+    error_check();
 }
 
 
@@ -53,7 +53,7 @@ void set_handler() {
     action.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
     set_default_mask(&action.sa_mask);
     sigaction(SIGNAL, &action, NULL);
-    check_for_error();
+    error_check();
 }
 
 

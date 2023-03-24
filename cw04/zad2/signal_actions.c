@@ -100,7 +100,7 @@ int main(const int argc, const char** argv) {
 
     puts("----- Testing NODEFER flag -----");
     set_flag_NODEFER();
-    puts("Raising a signal - a recursive handle is being called");
+    puts("Raising a signal - a recursive handler is being called");
     raise(SIGNAL);
     puts("");
     

@@ -140,7 +140,7 @@ void test(command cmd) {
     SAFE_FORK(pid)
 
     if (pid)
-        SAFE_EXEC("./other", "other", cmd == PENDING ? "1" : "0")   
+        SAFE_EXEC("./other.out", "other.out", cmd == PENDING ? "1" : "0")   
     
     else {
         if (cmd != PENDING) {
@@ -165,6 +165,9 @@ int main(const int argc, const char** argv) {
 
     command cmd;
     parse_arg(argv[1], &cmd);
+
+    printf("Testing for option \'%s\':\n", args[cmd]);
+
     process(cmd);
     test(cmd);
 

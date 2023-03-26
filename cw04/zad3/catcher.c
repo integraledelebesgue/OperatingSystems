@@ -11,7 +11,7 @@
 
 #include"communicates.h"
 
-#define WRITE_BOUND 10
+#define WRITE_BOUND 100
 
 #ifndef SIGNAL
 #define SIGNAL SIGUSR1
@@ -26,12 +26,12 @@ void time_loop();
 #define loop while(1)
 
 
-static int pipe_desc[2] = {0, 0};
+static int pipe_desc[2];
 
-#define init_pipe() {  \
-    pipe(pipe_desc);   \
-    sync_error_check() \
-}                      \
+#define init_pipe() {   \
+    pipe(pipe_desc);    \
+    sync_error_check()  \
+}                       \
 
 
 static pthread_mutex_t errno_mutex;
@@ -44,15 +44,27 @@ static pthread_mutex_t printf_mutex;
 }                                             \
 
 
-#define sync_error_check() {                  \
-    pthread_mutex_lock(&errno_mutex);         \
-    if (errno){                               \
-        fprintf(stderr, "Error %d: ", errno); \
-        perror("");                           \
-        exit(EXIT_FAILURE);                   \
-    }                                         \
-    pthread_mutex_unlock(&errno_mutex);       \
-}                                             \
+#define init_handler() {                                              \
+    sigset_t default_mask;                                            \
+    struct sigaction action;                                          \
+    init_default_mask(&default_mask);                                 \
+    action.sa_mask = default_mask;                                    \
+    action.sa_flags = SA_SIGINFO;                                     \
+    action.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;  \
+    sigaction(SIGNAL, &action, NULL);                                 \
+    sync_error_check();                                               \
+}                                                                     \
+
+
+#define sync_error_check() {                   \
+    pthread_mutex_lock(&errno_mutex);          \
+    if (errno){                                \
+        fprintf(stderr, "Error %d: ", errno);  \
+        perror("");                            \
+        exit(EXIT_FAILURE);                    \
+    }                                          \
+    pthread_mutex_unlock(&errno_mutex);        \
+}                                              \
 
 
 void sync_printf(const char *format, ...) {
@@ -90,21 +102,7 @@ void init_await_mask(sigset_t* mask) {
 }
 
 
-void init_handler() {
-    sigset_t default_mask;
-    struct sigaction action;
-    
-    init_default_mask(&default_mask);
-    action.sa_mask = default_mask;
-    action.sa_flags = SA_SIGINFO | SA_RESTART;
-    action.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
-
-    sigaction(SIGNAL, &action, NULL);
-    sync_error_check();
-}
-
-
-_Noreturn void events_loop() {
+_Noreturn void listener() {
     sigset_t await_mask;
     sigset_t default_mask;
 
@@ -139,8 +137,8 @@ void handler(int, siginfo_t* siginfo, void*) {
     }
     
     //sync_error_check();  // Checking for errors here causes program to crash 
-    //                        despite having a mutex on errno :c
-    //                        Must remain unsafe then.
+    //                        despite having a mutex on errno.
+    //                        Must remain unchecked then.
 }
 
 
@@ -157,11 +155,9 @@ void processor() {
         read(pipe_desc[0], (void*)&cmd, sizeof(int));
 
         if (task_id) pthread_cancel(task_id);
-        
-        sync_error_check();
 
         if (cmd == QUIT) {
-            sync_printf("Processor thread terminating\n");
+            sync_printf("Terminating processor thread\n");
             pthread_exit(NULL);
         }
 
@@ -171,13 +167,12 @@ void processor() {
 
 
 pthread_t execute(command cmd) {
-    int i;
-    struct tm* tm;
-    time_t timer = time(NULL);
-    pthread_t time_loop_id;
-
+    static int i;
+    static struct tm* tm;
+    static time_t timer;
     static command prev_cmd;
     static int cmd_counter;
+    static pthread_t time_loop_id;
 
     if (cmd != prev_cmd) {
         prev_cmd = cmd;
@@ -191,6 +186,7 @@ pthread_t execute(command cmd) {
             return 0;
 
         case TIME:
+            timer = time(NULL);
             tm = localtime(&timer);
             sync_printf("%s", asctime(tm));
             return 0;
@@ -201,7 +197,6 @@ pthread_t execute(command cmd) {
 
         case TIME_LOOP:
             pthread_create(&time_loop_id, NULL, (void* (*)(void*))time_loop, NULL);
-            sync_error_check();
             return time_loop_id;
 
         default:
@@ -211,9 +206,9 @@ pthread_t execute(command cmd) {
 
 
 _Noreturn void time_loop() {
-    struct tm* tm;
-    time_t timer;
-    sigset_t mask;
+    static struct tm* tm;
+    static time_t timer;
+    static sigset_t mask;
 
     init_default_mask(&mask);
     sigprocmask(SIG_SETMASK, &mask, NULL);
@@ -229,7 +224,7 @@ _Noreturn void time_loop() {
 
 
 int main(const int argc, const char** argv) {
-    pthread_t loop_id, processor_id;
+    pthread_t listener_id, processor_id;
     sigset_t mask;
     
     setbuf(stdout, NULL);
@@ -238,17 +233,18 @@ int main(const int argc, const char** argv) {
     init_pipe();
     init_handler();
     init_default_mask(&mask);
+
     sigprocmask(SIG_SETMASK, &mask, NULL);
     sync_error_check();
 
     printf("Catcher's PID: %d\n", getpid());
 
-    pthread_create(&loop_id, NULL, (void* (*)(void*))events_loop, NULL);
+    pthread_create(&listener_id, NULL, (void* (*)(void*))listener, NULL);
     pthread_create(&processor_id, NULL, (void* (*)(void*))processor, NULL);
     sync_error_check();
 
     pthread_join(processor_id, NULL);
-    pthread_cancel(loop_id);
+    pthread_cancel(listener_id);
 
     sync_error_check();
 

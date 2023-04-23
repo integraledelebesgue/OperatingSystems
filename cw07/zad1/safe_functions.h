@@ -23,18 +23,19 @@ union semun {
 key_t safe_ftok(const char* path, const int id);
 
 int safe_shmget(const key_t key, const size_t size, const int shmflg);
-void* safe_shmat(const int id, const int flag);
-void safe_shmdt(const void* seg);
-void safe_shmctl(const int id, const int cmd, struct shmid_ds* buf);
-void remove_shm(const int id);
+int shm_create(const key_t key, const size_t size, const int flag);
+void* shm_attach(const int id, const int flag);
+void shm_detach(const void* seg);
+void shm_control(const int id, const int cmd, struct shmid_ds* buf);
+void shm_remove(const int id);
 
 int safe_semget(const key_t key, const int n_sems, const int flag);
 void safe_semop(const int id, struct sembuf* ops, unsigned n_ops);
 void sem_wait(const int id, const int num);
-void sem_trywait(const int id, const int num);
+int sem_trywait(const int id, const int num);
 void sem_post(const int id, const int num);
 int safe_semctl(const int id, const int num, const int cmd, union semun arg);
-void init_sem(const int id, const int num, const int val);
-void remove_semset(const int id);
+void sem_init(const int id, const int num, const int val);
+void semset_remove(const int id);
 
 #endif 

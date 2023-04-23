@@ -11,44 +11,11 @@
 #include <sys/shm.h>
 
 #include "safe_functions.h"
-
-
-#ifndef MAX_WAITING
-#define MAX_WAITING 15
-#endif
-
-#ifndef N_CHAIRS
-#define N_CHAIRS 5
-#endif
-
-#ifndef N_BARBERS
-#define N_BARBERS 10
-#endif
-
-#if (N_BARBERS < N_CHAIRS)
-#error "A number of barbers should be equal or greater than the number of chairs"
-#endif 
-
-
-typedef enum {
-    customer_wait = 0,
-    customer_get = 1,
-    chair = 2
-} sems;
-
-
-void spawn_barbers(const int mem_id, const int sem_id) {
-    puts("Spawning barbers...");
-}
-
-
-void spawn_customers(const int mem_id, const int sem_id) {
-    puts("Spawning customers...");
-}
+#include "common.h"
 
 
 void handler(int _) {
-    puts("Server shutting down...");
+    printf("\nServer shutting down...\n");
 }
 
 
@@ -62,16 +29,22 @@ void suspend() {
 
 int main(const int argc, const char** argv) {
     const key_t mem_key = safe_ftok("./server.c", 0);
-    const int mem_id = safe_shmget(
+    const int mem_id = shm_create(
         mem_key, 
-        (N_CHAIRS + MAX_WAITING) * sizeof(int), 
-        IPC_CREAT | 0666
+        sizeof(queue_t), 
+        0666
     );
 
-    void* mem_seg = safe_shmat(
+    char mem_id_buffer[15];
+    sprintf(mem_id_buffer, "%d", mem_id);
+
+    void* mem_seg = shm_attach(
         mem_id,
         S_IWRITE | S_IREAD
     );
+
+    queue_t* queue = (queue_t*) mem_seg;
+    queue_init(queue);
     
     const key_t sem_key = safe_ftok("./server.c", 1);
     const int sem_id = safe_semget(
@@ -80,17 +53,20 @@ int main(const int argc, const char** argv) {
         IPC_CREAT | S_IWRITE | S_IREAD
     );
 
-    init_sem(sem_id, customer_wait, MAX_WAITING);
-    init_sem(sem_id, customer_get, 0);
-    init_sem(sem_id, chair, N_CHAIRS);
+    char sem_id_buffer[15];
+    sprintf(sem_id_buffer, "%d", sem_id);
 
-    spawn_barbers(mem_id, sem_id);
-    spawn_customers(mem_id, sem_id);
+    printf("Memory ID: %d\nSemaphore ID: %d\n", mem_id, sem_id);
+
+    sem_init(sem_id, customer_wait, MAX_WAITING);
+    sem_init(sem_id, customer_get, 0);
+    sem_init(sem_id, chair, N_CHAIRS);
+
     suspend();
 
-    safe_shmdt(mem_seg);
-    remove_shm(mem_id);
-    remove_semset(sem_id);
+    shm_detach(mem_seg);
+    shm_remove(mem_id);
+    semset_remove(sem_id);
 
     return 0;
 }

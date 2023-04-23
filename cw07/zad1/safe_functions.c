@@ -1,3 +1,4 @@
+#include<errno.h>
 #include "safe_functions.h"
 
 
@@ -23,7 +24,12 @@ int safe_shmget(const key_t key, const size_t size, const int flag) {
 }
 
 
-void* safe_shmat(const int id, const int flag) {
+int shm_create(const key_t key, const size_t size, const int flag) {
+    return safe_shmget(key, size, flag | IPC_CREAT);
+}
+
+
+void* shm_attach(const int id, const int flag) {
     void* seg = shmat(id, NULL, flag);
     if (seg == (void*)-1) {
         perror("shmat");
@@ -34,7 +40,7 @@ void* safe_shmat(const int id, const int flag) {
 }
 
 
-void safe_shmdt(const void* seg) {
+void shm_detach(const void* seg) {
     if (shmdt(seg) == -1) {
         perror("shmdt");
         exit(EXIT_FAILURE);
@@ -42,7 +48,7 @@ void safe_shmdt(const void* seg) {
 }
 
 
-void safe_shmctl(const int id, const int cmd, struct shmid_ds* buf) {
+void shm_control(const int id, const int cmd, struct shmid_ds* buf) {
     if (shmctl(id, cmd, buf) == -1) {
         perror("shmctl");
         exit(EXIT_FAILURE);
@@ -50,8 +56,8 @@ void safe_shmctl(const int id, const int cmd, struct shmid_ds* buf) {
 }
 
 
-void remove_shm(const int id) {
-    safe_shmctl(id, IPC_RMID, NULL);
+void shm_remove(const int id) {
+    shm_control(id, IPC_RMID, NULL);
 }
 
 
@@ -77,18 +83,20 @@ void safe_semop(const int id, struct sembuf* ops, unsigned n_ops) {
 void sem_wait(const int id, const int num) {
     safe_semop(
         id, 
-        &(struct sembuf) {.sem_num = num, .sem_op = -1, .sem_flg = SEM_UNDO},
+        &(struct sembuf) {.sem_num = num, .sem_op = -1, .sem_flg = 0},
         1        
     );
 }
 
 
-void sem_trywait(const int id, const int num) {
+int sem_trywait(const int id, const int num) {
     safe_semop(
         id, 
         &(struct sembuf) {.sem_num = num, .sem_op = -1, .sem_flg = SEM_UNDO | IPC_NOWAIT},
         1        
     );
+
+    return errno == EAGAIN ? -1 : 0;
 }
 
 
@@ -112,7 +120,7 @@ int safe_semctl(const int id, const int num, const int cmd, union semun arg) {
 }
 
 
-void init_sem(const int id, const int num, const int val) {
+void sem_init(const int id, const int num, const int val) {
     safe_semctl(
         id,
         num,
@@ -122,6 +130,6 @@ void init_sem(const int id, const int num, const int val) {
 }
 
 
-void remove_semset(const int id) {
+void semset_remove(const int id) {
     safe_semctl(id, 0, IPC_RMID, (union semun) {});
 }

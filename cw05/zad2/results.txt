@@ -1,0 +1,90 @@
+For 1 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000037 s
+For 2 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000079 s
+For 3 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000100 s
+For 4 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000184 s
+For 5 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000234 s
+For 6 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000248 s
+For 7 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000269 s
+For 8 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000314 s
+For 9 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000297 s
+For 10 processes with 0.100000 accuracy:
+Result: 3.439926
+Executed in 0.000367 s
+For 1 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000115 s
+For 2 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000152 s
+For 3 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000192 s
+For 4 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000211 s
+For 5 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000234 s
+For 6 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000324 s
+For 7 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000302 s
+For 8 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000402 s
+For 9 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000443 s
+For 10 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000475 s
+For 1 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000852 s
+For 2 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001238 s
+For 3 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000963 s
+For 4 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001133 s
+For 5 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001206 s
+For 6 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001128 s
+For 7 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001171 s
+For 8 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001290 s
+For 9 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001403 s
+For 10 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.001001 s

@@ -9,6 +9,7 @@
 #include<sys/fcntl.h>
 #include<sys/mman.h>
 #include<semaphore.h>
+#include<errno.h>
 
 
 #include "../zad2/safe_functions.h"
@@ -19,7 +20,7 @@
 
 #define safe_fifo(path, mode) {\
     if (mknod(path, mode, S_IFIFO) == -1) {\
-        perror("mkfifo");\
+        perror("mknod");\
         exit(EXIT_FAILURE);\
     }\
 }\
@@ -44,6 +45,9 @@ int main(const int argc, const char** argv) {
     sem_t* shm_lock = sem_open(SHM_LOCK, O_CREAT, S_IREAD | S_IWRITE, 0);
     sem_post(shm_lock);
 
+    if (errno)
+        exit(EXIT_FAILURE);
+
     char *call_buffer;
     (void)asprintf(&call_buffer, "./component.out %lf %s %s", diff, SHM_NAME, SHM_LOCK);
 
@@ -65,8 +69,9 @@ int main(const int argc, const char** argv) {
     while (safe_read(return_desc, (void*)&part, sizeof(double)) > 0)
         result += part;
 
+    printf("For %d processes with %lf accuracy:\n", n, diff);
     printf("Result: %lf\n", result);
-    printf("Executed in %lf s\n", (double)*(time_t*)shm / CLOCKS_PER_SEC);
+    printf("Executed in %lf s\n\n", (double)*(time_t*)shm / CLOCKS_PER_SEC);
 
     free(call_buffer);
     safe_close(return_desc);

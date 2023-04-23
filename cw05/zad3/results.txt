@@ -1,0 +1,160 @@
+For 1 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000027 s
+
+For 2 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000075 s
+
+For 3 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000104 s
+
+For 4 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000177 s
+
+For 5 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000205 s
+
+For 6 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000261 s
+
+For 7 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000337 s
+
+For 8 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000333 s
+
+For 9 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000439 s
+
+For 10 processes with 0.100000 accuracy:
+Result: 3.639926
+Executed in 0.000511 s
+
+For 1 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000075 s
+
+For 2 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000114 s
+
+For 3 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000160 s
+
+For 4 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000230 s
+
+For 5 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000280 s
+
+For 6 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000318 s
+
+For 7 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000419 s
+
+For 8 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000487 s
+
+For 9 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000516 s
+
+For 10 processes with 0.010000 accuracy:
+Result: 3.151576
+Executed in 0.000496 s
+
+For 1 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000216 s
+
+For 2 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000330 s
+
+For 3 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000379 s
+
+For 4 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000433 s
+
+For 5 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000574 s
+
+For 6 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000510 s
+
+For 7 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000538 s
+
+For 8 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000604 s
+
+For 9 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000655 s
+
+For 10 processes with 0.001000 accuracy:
+Result: 3.142592
+Executed in 0.000825 s
+
+For 1 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.001647 s
+
+For 2 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.002516 s
+
+For 3 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003525 s
+
+For 4 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003325 s
+
+For 5 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003237 s
+
+For 6 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003919 s
+
+For 7 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003811 s
+
+For 8 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.004156 s
+
+For 9 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.004200 s
+
+For 10 processes with 0.000100 accuracy:
+Result: 3.142093
+Executed in 0.003063 s
+

@@ -127,6 +127,7 @@ int main(const int argc, const char** argv) {
         result += part;
     }
 
+    printf("For %d processes with %lf accuracy:\n", n, diff);
     printf("Result: %lf\nExecuted in %lf s\n", result, (double)*(time_t*)exec_time / CLOCKS_PER_SEC);
 
     sem_destroy(&exec_time_mutex);

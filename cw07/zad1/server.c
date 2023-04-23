@@ -35,9 +35,6 @@ int main(const int argc, const char** argv) {
         0666
     );
 
-    char mem_id_buffer[15];
-    sprintf(mem_id_buffer, "%d", mem_id);
-
     void* mem_seg = shm_attach(
         mem_id,
         S_IWRITE | S_IREAD
@@ -52,9 +49,6 @@ int main(const int argc, const char** argv) {
         3,
         IPC_CREAT | S_IWRITE | S_IREAD
     );
-
-    char sem_id_buffer[15];
-    sprintf(sem_id_buffer, "%d", sem_id);
 
     printf("Memory ID: %d\nSemaphore ID: %d\n", mem_id, sem_id);
 

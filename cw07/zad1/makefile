@@ -16,4 +16,4 @@ safe_functions.o: safe_functions.c safe_functions.h
 	$(CC) $(CFLAGS) -c safe_functions.c
 
 clean:
-	rm *.out
+	-@rm *.out

@@ -2,14 +2,15 @@
 #define SAFE_FUNCTIONS
 
 #define _GNU_SOURCE
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/shm.h>
+#include <time.h>
 
 /* From man-7 docs: */
 union semun {

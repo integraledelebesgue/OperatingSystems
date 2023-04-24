@@ -90,7 +90,7 @@ void sem_wait(const int id, const int num) {
 
 
 int sem_trywait(const int id, const int num) {
-    safe_semop(
+    semop(
         id, 
         &(struct sembuf) {.sem_num = num, .sem_op = -1, .sem_flg = SEM_UNDO | IPC_NOWAIT},
         1        

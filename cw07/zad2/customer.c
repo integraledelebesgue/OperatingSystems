@@ -22,34 +22,29 @@ void handler(int _sig) {
 
 
 int main(const int argc, const char** argv) {
-    if (argc != 3) {
-        printf("Wrong arguments. Usage: %s <shared memory segment id> <semaphore set id>", argv[0]);
-        exit(EXIT_FAILURE);
-    }
+    int shm_desc = safe_shmopen(SHM_NAME, O_RDWR, S_IREAD | S_IWRITE);
+    void* shm_seg = safe_mmap(NULL, sizeof(queue_t), PROT_READ | PROT_WRITE, MAP_SHARED, shm_desc, 0);
+    safe_ftruncate(shm_desc, sizeof(queue_t));
+
+    queue_t* queue = (queue_t*) shm_seg;
+    queue_init(queue);
     
-    pid = getpid();
-
-    const int mem_id = atoi(argv[1]);
-    const int sem_id = atoi(argv[2]);
-
-    void* mem_seg = shm_attach(
-        mem_id,
-        S_IREAD | S_IWRITE
-    );
+    sem_t* customer_wait_sem = safe_sem_open(WAIT_SEM_NAME, 0, S_IREAD | S_IWRITE, MAX_WAITING);
+    sem_t* customer_get_sem = safe_sem_open(GET_SEM_NAME, 0, S_IREAD | S_IWRITE, 0);
 
     sigset_t wait;
     sigemptyset(&wait);
 
     signal(SIGDONE, handler);
 
-    queue_t* queue = (queue_t*) mem_seg;
+    pid = getpid();
 
     hairstyle_t hairstyle = {.hairstyle = 1 + rand() % 5, .pid = pid};
 
-    if (sem_trywait(sem_id, customer_wait) == -1)
+    if (sem_trywait(customer_wait_sem) == -1)
         goto exit;
 
-    sem_post(sem_id, customer_get);
+    sem_post(customer_get_sem);
     queue_put(queue, hairstyle);
     
     printf("[Customer %d] chooses hairstyle no. %ld and waits\n", pid, hairstyle.hairstyle);
@@ -58,7 +53,9 @@ int main(const int argc, const char** argv) {
 
     exit:
     printf("[Customer %d] leaves\n", pid);
-    shm_detach(mem_seg);
+    safe_munmap(shm_seg, sizeof(queue_t));
+    sem_close(customer_wait_sem);
+    sem_close(customer_get_sem);
 
     return 0;
 }

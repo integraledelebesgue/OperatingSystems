@@ -34,7 +34,7 @@ int main(const int argc, const char** argv) {
 
     void* mem_seg = shm_attach(
         mem_id,
-        S_IREAD
+        S_IREAD | S_IWRITE
     );
 
     queue_t* queue = (queue_t*) mem_seg;

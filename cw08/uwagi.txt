@@ -1,0 +1,4 @@
+Dla uproszczenia kodu przyjęto, że plansza ma kształt kwadratu o boku długości GRID_SIZE.
+Działanie wątków odbywa się z dodatkową synchronizacją mimo, że temat zadania tego nie wymaga.
+Czas trwania każdej klatki można sprecyzować parametrem FRAME_DELAY.
+W rozwiązaniu zadania 2. liczbę wątków określa parametr THREADPOOL_SIZE.

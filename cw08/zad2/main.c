@@ -20,6 +20,10 @@
 #define THREAD_START_DELAY 100
 #endif
 
+#ifndef THREADPOOL_SIZE
+#define THREADPOOL_SIZE 8
+#endif
+
 #define cell_no(i, j) (i) * GRID_SIZE + j
 
 #define out_of_bounds(i) (i < 0) || (i >= GRID_SIZE)
@@ -32,12 +36,59 @@
 
 
 typedef struct {
-    size_t cell;
+    const size_t data[GRID_SIZE * GRID_SIZE];
+    size_t start;
+    pthread_mutex_t read_lock;
+} queue_t;
+
+
+typedef struct {
+    queue_t* tasks;
     short* foreground;
     short* background;
     pthread_cond_t* start;
     pthread_barrier_t* barrier;
 } map_t;
+
+
+void queue_init(queue_t* queue) {
+    for (size_t i = 0; i < GRID_SIZE * GRID_SIZE; i++)
+        *((size_t*)(queue->data) + i) = i;
+
+    queue->start = 0;
+    pthread_mutex_init(&queue->read_lock, NULL);
+}
+
+
+void queue_destroy(queue_t* queue) {
+    pthread_mutex_destroy(&queue->read_lock);
+}
+
+
+void reset(queue_t* queue) {
+    queue->start = 0;
+}
+
+
+#define empty(queue) queue->start == GRID_SIZE * GRID_SIZE
+
+#define SUCCESS 1
+#define FAILURE 0
+
+short get(queue_t* queue, size_t* result) {
+    pthread_mutex_lock(&queue->read_lock);
+    
+    if (empty(queue)) { 
+        pthread_mutex_unlock(&queue->read_lock);
+        return FAILURE;
+    }
+    
+    *result = queue->data[queue->start++];
+    
+    pthread_mutex_unlock(&queue->read_lock);
+
+    return SUCCESS;
+}
 
 
 short running;
@@ -69,8 +120,10 @@ void draw(short* grid) {
 }
 
 
-short new_state(short* grid, const size_t cell, const size_t i, const size_t j) {
+short new_state(short* grid, const size_t cell) {
     short alive_neighbours = 0;
+    const size_t i = cell / GRID_SIZE;
+    const size_t j = cell % GRID_SIZE;
 
     for (int i_offset = -1; i_offset <= 1; i_offset++) {
         if (out_of_bounds(i + i_offset)) continue;
@@ -88,14 +141,11 @@ short new_state(short* grid, const size_t cell, const size_t i, const size_t j) 
 
 
 void compute(map_t* const map) {
-    const size_t cell = map->cell;
-    const size_t i = map->cell / GRID_SIZE;
-    const size_t j = map->cell % GRID_SIZE;
-
+    queue_t* tasks = map->tasks;
     short* foreground = map->foreground;
     short* background = map->background;
     short* tmp;
-
+    size_t cell;
     pthread_barrier_t* barrier = map->barrier;
     pthread_cond_t* start = map->start;
 
@@ -108,7 +158,9 @@ void compute(map_t* const map) {
     pthread_cond_wait(start, &start_wait_ex);
 
     while (running) {
-        background[cell] = new_state(foreground, cell, i, j);
+        while (get(tasks, &cell))
+            background[cell] = new_state(foreground, cell);
+
         pthread_barrier_wait(barrier);
         swap(foreground, background, tmp);
     }
@@ -117,21 +169,21 @@ void compute(map_t* const map) {
 }
 
 
-void spawn(short* foreground, short* background, pthread_barrier_t* barrier, pthread_cond_t* start) {
+void spawn(queue_t* tasks, short* foreground, short* background, pthread_barrier_t* barrier, pthread_cond_t* start) {
     pthread_attr_t attributes;
     pthread_attr_init(&attributes);
     pthread_attr_setdetachstate(&attributes, PTHREAD_CREATE_DETACHED);
 
     pthread_t ignore;
 
-    for (size_t cell = 0; cell < GRID_SIZE * GRID_SIZE; cell++) {
+    for (size_t i = 0; i < THREADPOOL_SIZE; i++) {
         map_t* map = malloc(sizeof(map_t));
         *map = (map_t) {
+            .tasks = tasks,
             .foreground = foreground,
             .background = background,
             .barrier = barrier,
             .start = start,
-            .cell = cell
         };
 
         pthread_create(
@@ -160,26 +212,32 @@ int main(const int __attribute__ ((unused)) argc, const char** __attribute__ ((u
 
     init(foreground);
 
+    queue_t tasks;
+    queue_init(&tasks);
+
     pthread_barrier_t barrier;
-    pthread_barrier_init(&barrier, NULL, GRID_SIZE * GRID_SIZE + 1);
+    pthread_barrier_init(&barrier, NULL, THREADPOOL_SIZE + 1);
 
     pthread_cond_t start;
     pthread_cond_init(&start, NULL);
 
-    spawn(foreground, background, &barrier, &start);
+    spawn(&tasks, foreground, background, &barrier, &start);
 
     pthread_barrier_wait(&barrier);
-    usleep(THREAD_START_DELAY * GRID_SIZE * GRID_SIZE);
+    usleep(THREAD_START_DELAY * THREADPOOL_SIZE);
     pthread_cond_broadcast(&start);
 
     while (running) {
         draw(foreground);
         usleep(1000 * FRAME_DELAY);
         pthread_barrier_wait(&barrier);
+        reset(&tasks);
         swap(foreground, background, tmp);
     }
 
     endwin();
+
+    queue_destroy(&tasks);
 
     pthread_barrier_destroy(&barrier);
     pthread_cond_destroy(&start);

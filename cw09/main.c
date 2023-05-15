@@ -23,12 +23,12 @@
 #define ELF_DELAY_HIGH 2
 #define ELF_DELAY_LOW 1
 
-#ifndef N_DELIVERIES
-#define N_DELIVERIES 3
+#ifndef N_ACTIONS
+#define N_ACTIONS 3
 #endif
 
-#define DELIVERY_DELAY_HIGH 5
-#define DELIVERY_DELAY_LOW 2
+#define ACTION_DELAY_HIGH 5
+#define ACTION_DELAY_LOW 2
 
 
 #define random(low, high) low + rand() % (high - low)
@@ -65,13 +65,15 @@ void action(sem_t* reindeers, sem_t* elves) {
     sem_getvalue(elves, &elves_count);
 
     if (elves_count == 0)
-        puts("Santa solves elves' problems");
+        puts("[Mikołaj]: Rozwiązuję problemy elfów");
 
     else if (reindeers_count == 0)
-        puts("Santa delivers presents");
+        puts("[Mikołaj]: Dostarczam zabawki");
 
     else
-        puts("Santa finds himself being awoken in an invalid state. Undefined behaviour takes place");
+        puts("[Mikołaj]: Co się dzieje???");
+
+    fflush(stdout);
 }
 
 
@@ -84,19 +86,33 @@ void reset(sem_t* sem, const int value) {
 void santa(arg_t* args) {
     unpack(args);
 
-    int i = N_DELIVERIES;
+    int i = N_ACTIONS;
 
     while (i--) {
         pthread_mutex_lock(sleep_lock);
         pthread_cond_wait(santa_sleep, sleep_lock);
+
+        puts("[Mikołaj]: Budzę się");
+        fflush(stdout);
+
         action(reindeers, elves);
+
         reset(reindeers, N_REINDEERS);
         reset(elves, N_ELVES);
-        sleep(random(DELIVERY_DELAY_LOW, DELIVERY_DELAY_HIGH));
+
+        sleep(random(ACTION_DELAY_LOW, ACTION_DELAY_HIGH));
+
         pthread_mutex_unlock(sleep_lock);
+
         pthread_cond_broadcast(reindeer_sleep);
         pthread_cond_broadcast(elf_sleep);
+
+        puts("[Mikołaj]: Zasypiam");
+        fflush(stdout);
     }
+
+    puts("[Mikołaj]: Odchodzę na zasłużoną emeryturę");
+    fflush(stdout);
 }
 
 
@@ -115,18 +131,29 @@ void reindeer(arg_t* args) {
 
     while (1) {
         sleep(random(REINDEER_DELAY_LOW, REINDEER_DELAY_HIGH));
-        sem_wait(reindeers);
+        
+        if (sem_trywait(reindeers) == -1) {
+            printf("[Renifer %ld]: Wracam na wakacje\n", pthread_self());
+            fflush(stdout);
+            continue;
+        }
+
+        printf("[Renifer %ld]: Czekam na Mikołaja\n", pthread_self());
+        fflush(stdout);
 
         sem_getvalue(reindeers, &n);
 
-        if (n != 0) goto end;
+        if (n != 0) goto wait;
 
         if (pthread_mutex_trylock(sleep_lock) != -1) {
+            printf("[Renifer %ld]: Budzę Mikołaja\n", pthread_self());
+            fflush(stdout);
+
             pthread_cond_signal(santa_sleep);
             pthread_mutex_unlock(sleep_lock);
         }
 
-        end:
+        wait:
         pthread_cond_wait(reindeer_sleep, &sleep_mx);
     }
 }
@@ -148,18 +175,28 @@ void elf(arg_t* args) {
 
     while (1) {
         sleep(random(ELF_DELAY_LOW, ELF_DELAY_HIGH));
-        sem_wait(elves);
         
-        sem_getvalue(reindeers, &n);
+        if (sem_trywait(elves) == -1) {
+            printf("[Elf %ld]: Rozwiązuję swój problem samodzielnie\n", pthread_self());
+            fflush(stdout);
+            continue;
+        }
 
-        if (n != 0) goto end;
+        printf("[Elf %ld]: czekam na Mikołaja\n", pthread_self());
+        fflush(stdout);
+
+        sem_getvalue(elves, &n);
+
+        if (n != 0) goto wait;
 
         if (pthread_mutex_trylock(sleep_lock) != -1) {
+            printf("[Elf %ld]: budzę Mikołaja\n", pthread_self());
+
             pthread_cond_signal(santa_sleep);
             pthread_mutex_unlock(sleep_lock);
         }
 
-        end:
+        wait:
         pthread_cond_wait(elf_sleep, &sleep_mx);
     }
 }

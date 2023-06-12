@@ -1,0 +1,6 @@
+PASS: mutex producer
+PASS: cond producer
+PASS: mutex consumer
+PASS: cond consumer
+PASS: thread awaiting
+PASS: value processing
